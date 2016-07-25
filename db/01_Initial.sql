@@ -1,37 +1,34 @@
-DROP TABLE IF EXISTS team;
-DROP TABLE IF EXISTS team_member;
-DROP TABLE IF EXISTS todo_list;
+DROP TABLE IF EXISTS identity;
+DROP TABLE IF EXISTS travel_goal;
+DROP TABLE IF EXISTS goal_notes;
 
-CREATE TABLE team (
+CREATE TABLE  identity (
 	id 				serial PRIMARY KEY,
-	name 			text
+	id_token 		text
 );
 
-ALTER TABLE team OWNER TO scrum_server;
+ALTER TABLE identity OWNER TO travel_goal_server;
 
-CREATE TABLE team_member (
-	id 			serial PRIMARY KEY,
-	username 	text,
-	password	text,
-	team_id 	integer,
-		CONSTRAINT fk_team_member_to_team
-		FOREIGN KEY (team_id)
-		REFERENCES team (id)
-);
-
-ALTER TABLE team_member OWNER TO scrum_server;
-
-CREATE TABLE todo_list (
+CREATE TABLE travel_goal (
 	id 				serial PRIMARY KEY,
-	task			text,
-	team_member_id 	integer,
-	team_id 		integer,
-		CONSTRAINT fk_todo_list_to_team_member
-		FOREIGN KEY (team_member_id)
-		REFERENCES team_member (id),
-		CONSTRAINT fk_todo_list_to_team
-		FOREIGN KEY (team_id)
-		REFERENCES team (id)
+	location 		text,
+	summary			text,
+	priority		text,
+	identity_id 	integer,
+		CONSTRAINT fk_travel_goal_to_identity
+		FOREIGN KEY (identity_id)
+		REFERENCES identity (id)
 );
 
-ALTER TABLE todo_list OWNER TO scrum_server;
+ALTER TABLE travel_goal OWNER TO travel_goal_server;
+
+CREATE TABLE goal_notes (
+	id 					serial PRIMARY KEY,
+	note				text,
+	travel_goal_id 		integer,
+		CONSTRAINT fk_goal_notes_to_travel_goal
+		FOREIGN KEY (travel_goal_id)
+		REFERENCES travel_goal (id)
+);
+
+ALTER TABLE goal_notes OWNER TO travel_goal_server;

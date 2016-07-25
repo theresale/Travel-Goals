@@ -7,14 +7,19 @@
     <meta name="description" content="Create travel goals">
     <meta name="keyword" content="Travel, Goals, Destination, Cheap, Flights, Inspiration">
     <meta name="author" content="Theresa Le">
+    <meta name="google-signin-scope" content="profile email">
+    <meta name="google-signin-client_id" content="489209747870-jhijb9tj50sencsjo8mk0sicl24umtdr.apps.googleusercontent.com">
     <title>Travel Goals</title>
 </head>
 <body ng-app="myApp">
 <h1>Travel Goals</h1>
-
+<div ng-controller="loginCtrl">
+	<div class="g-signin2" data-onsuccess="onSignIn"></div>
+</div>
 
 <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
 <script src="app.js"></script>
+<script src="https://apis.google.com/js/platform.js?onload=onLoadCallback" async defer></script>
 
 </body>
 </html>
