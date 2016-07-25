@@ -1,0 +1,63 @@
+Larger Objective:
+	Display knowledge of key web development tools
+		- Database → register/login, destination goals
+ 		- Angular JS
+		- Jasmine/Karma Testing
+		- API integration → skyscanner, possibly instagram/flickr API, Tripadvisor
+		- Wiki Voyage?
+		- Search engine optimization
+		- Clean Code
+		- Show off strong design aesthetics with attention to UX/UI
+			Skeleton framework - http://getskeleton.com/
+		- Opportunity to build a brand/story
+			travel goals → inspiration → dreams
+
+Key Features:
+	Create a site where users can create travel goals
+		- First users choose a destination they hope to go to in the near future
+		- Every time user logs in, they can see when the best time within the next year would be to fly to that place, and can compare with other places they're interested in visiting
+		- User is also met with visual inspiration of the place, sometimes the best part is dreaming about going to that place until your funds/schedule and the stars align to make it a reality
+		- Ability to add custom notes/thoughts about place regarding
+
+
+Monday
+1. Gather/research APIs, make sure they aren’t too limited
+	- Skyscanner: Flights Live Service, Hotels and Car Hire all have a rate limit of 100 searches per minute. Browse Service has 500 searches per minute.
+		+ http://business.skyscanner.net/portal/en-GB/Documentation/FlightsBrowseCacheOverview
+		+ Find the cheapest prices/time to fly from hometown → X within the next year
+	- Flickr:  3600 queries per hour 
+		+ Access photos with search key words
+	- Tripadvisor:
+		+ API calls made with a TripAdvisor geo location ID or latitude & longitude will return up to 10 top things to do for that place
+		+ Asks for working URL to gain access to api key…. Possibly scrape the data?
+		+ https://www.tripadvisor.com/APIAccessSupport
+	= Triposo (awesome travel site) uses wikitravel/wiki voyage for list of things to do
+2. Initial site set up
+3. Set up postgres tables
+4. Login with google set up
+5. Set up skeleton
+	*Monday Night: Starting Mood Board, UX/UI Inspiration, Watch tutorial on skeleton*
+
+
+Tuesday
+1. After logging in, be able to add and delete travel goals which will then be displayed on browser
+2. Begin working on skyscanner api to then display best time of year to fly to that place from time of log in to a year after logging in 
+
+Wednesday
+1. Finish up cheapest flight functionality
+2. Start on inspiration: images of that destination
+
+Thursday
+1. Finish Inspiration bar
+2. Ability to add/delete notes for destination
+
+Friday
+Overflow day
+
+Weekend
+Improve user interface/design
+  
+
+
+
+
