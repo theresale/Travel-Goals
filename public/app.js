@@ -6,24 +6,36 @@ var app = angular.module('myApp', []);
 app.controller('loginCtrl', function($scope, $http) {
 
 	$scope.onSignIn = function(googleUser){
-		var id_token = googleUser.getAuthResponse().id_token;
-		var profile = googleUser.getBasicProfile();
-		console.log(id_token);
-		console.log(profile);
-		// window.onLoadCallback = function(){
-	 //   		gapi.load('auth2', function() {
-	 //     		gapi.auth2.init();
-	 //    	});
-		//     if (auth2.isSignedIn.get()) {
-		//   		var profile = auth2.currentUser.get().getBasicProfile();
-		// 		  console.log('ID: ' + profile.getId());
-		// 		  console.log('Full Name: ' + profile.getName());
-		// 		  console.log('Given Name: ' + profile.getGivenName());
-		// 		  console.log('Family Name: ' + profile.getFamilyName());
-		// 		  console.log('Image URL: ' + profile.getImageUrl());
-		// 		  console.log('Email: ' + profile.getEmail());
-		// 	};
-		// };
+		// var id_token = googleUser.getAuthResponse().id_token;
+		var id_token = googleUser.getBasicProfile().Ka;
+
+		$http({
+			method: "GET",
+			url: "/users",
+			params: {id_token: id_token}
+		}).then(function successCallback(data){
+            if(data.data.rows.length === 0){
+            	console.log(id_token);
+            	$http({
+		            method: "POST",
+			        url: "/users",
+			        data: {id_token: id_token}
+			    }).then(function successCallback(data) {
+			    	var id = data.data.rows[0].id;
+			        alert("Thank you for joining, you may now start creating travel goals!");
+			    },
+			    function errorCallback(error) {
+			        console.log("error")
+			    });
+            }else{
+            	var id = data.data.rows[0].id;
+            	console.log(data);
+            	console.log("welcome back");
+            }
+        },
+        function errorCallback(error) {
+            console.log(error);
+        });
 	};
 	window.onSignIn = $scope.onSignIn;
 });

@@ -4,7 +4,7 @@ DROP TABLE IF EXISTS goal_notes;
 
 CREATE TABLE  identity (
 	id 				serial PRIMARY KEY,
-	id_token 		text
+	id_token 		text NOT NULL
 );
 
 ALTER TABLE identity OWNER TO travel_goal_server;
@@ -15,6 +15,7 @@ CREATE TABLE travel_goal (
 	summary			text,
 	priority		text,
 	identity_id 	integer,
+	UNIQUE (location, identity_id),
 		CONSTRAINT fk_travel_goal_to_identity
 		FOREIGN KEY (identity_id)
 		REFERENCES identity (id)
