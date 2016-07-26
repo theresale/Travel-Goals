@@ -3,11 +3,11 @@
 var app = angular.module('myApp', []);
 
 
-app.controller('loginCtrl', function($scope, $http) {
-
+app.controller('loginCtrl', function($scope, $http, sendData) {
 	$scope.onSignIn = function(googleUser){
 		// var id_token = googleUser.getAuthResponse().id_token;
 		var id_token = googleUser.getBasicProfile().Ka;
+		$scope.name = googleUser.getBasicProfile().wc;
 
 		$http({
 			method: "GET",
@@ -15,22 +15,20 @@ app.controller('loginCtrl', function($scope, $http) {
 			params: {id_token: id_token}
 		}).then(function successCallback(data){
             if(data.data.rows.length === 0){
-            	console.log(id_token);
             	$http({
 		            method: "POST",
 			        url: "/users",
 			        data: {id_token: id_token}
 			    }).then(function successCallback(data) {
-			    	var id = data.data.rows[0].id;
-			        alert("Thank you for joining, you may now start creating travel goals!");
+			    	sendData.identity_id = data.data.rows[0].id;
+			        alert("Thank you for joining " + $scope.name + ", you may now start creating travel goals!");
 			    },
 			    function errorCallback(error) {
-			        console.log("error")
+			        console.log("error");
 			    });
             }else{
-            	var id = data.data.rows[0].id;
-            	console.log(data);
-            	console.log("welcome back");
+			    sendData.identity_id = data.data.rows[0].id;
+            	console.log("welcome back "+$scope.name);
             }
         },
         function errorCallback(error) {
@@ -38,6 +36,25 @@ app.controller('loginCtrl', function($scope, $http) {
         });
 	};
 	window.onSignIn = $scope.onSignIn;
+});
+
+app.controller('travelGoalsCtrl', function($scope, $http, sendData){
+	$scope.addTravelGoal = function(){
+		$http({
+			method:"POST",
+			url:"/goals",
+			data: {location: $scope.location, summary: $scope.summary, priority: $scope.priority, identity_id: sendData.identity_id}
+		}).then(function successCallback(data) {
+            console.log(data);
+        },
+        function errorCallback(error) {
+            console.log(error);
+        });
+	};
+});
+
+app.service('sendData', function(){
+    this.identity_id = 0;
 });
 
 

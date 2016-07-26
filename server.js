@@ -15,12 +15,19 @@ app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
 
 app.get("/users", function(request, response){
 	databaseManager.checkGoogleId(request.query.id_token, function(result){
-		return response.send(JSON.stringify(result));
+		return response.send(result);
 	});
 });
 
 app.post("/users", function(request, response){
  	databaseManager.saveGoogleId(request.body.id_token, function(result){
+ 		return response.send(result);
+ 	});
+});
+
+app.post("/goals", function(request, response){
+	console.log(request.body);
+ 	databaseManager.saveTravelGoal(request.body.location, request.body.summary, request.body.priority, request.body.identity_id, function(result){
  		return response.send(result);
  	});
 });
