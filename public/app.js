@@ -39,13 +39,26 @@ app.controller('loginCtrl', function($scope, $http, sendData) {
 });
 
 app.controller('travelGoalsCtrl', function($scope, $http, sendData){
+	$scope.viewTravelGoals = function(){
+		$http({
+			method:"GET",
+			url:"/goals",
+			params: {identity_id: sendData.identity_id}
+		}).then(function successCallback(data) {
+            console.log(data);
+        },
+        function errorCallback(error) {
+            console.log(error);
+        });
+	};
+
 	$scope.addTravelGoal = function(){
 		$http({
 			method:"POST",
 			url:"/goals",
 			data: {location: $scope.location, summary: $scope.summary, priority: $scope.priority, identity_id: sendData.identity_id}
 		}).then(function successCallback(data) {
-            console.log(data);
+            //console.log(data);
         },
         function errorCallback(error) {
             console.log(error);

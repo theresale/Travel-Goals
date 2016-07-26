@@ -7,7 +7,7 @@
     <link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="css/normalize.css">
     <link rel="stylesheet" href="css/skeleton.css">
-    <link rel="icon" type="image/png" href="images/favicon.png"> <!--change this icon!!!!-->
+    <link rel="icon" type="image/png" href="images/favicon.png"><!--change this icon!!!!-->
     <meta name="description" content="Create travel goals">
     <meta name="keyword" content="Travel, Goals, Destination, Cheap, Flights, Inspiration">
     <meta name="author" content="Theresa Le">
@@ -16,32 +16,54 @@
     <title>Travel Goals</title>
 </head>
 <body ng-app="myApp">
-  <!-- <div class="container">
-    <div class="row">
+
+<div class="container">
+   <!--  <div class="row">
       <div class="one-half column" style="margin-top: 25%">
         <h4>Travel Goals</h4>
         <p>This index.html page is a placeholder with the CSS, font and favicon. It's just waiting for you to add some content! If you need some help hit up the <a href="http://www.getskeleton.com">Skeleton documentation</a>.</p>
       </div>
+    </div> -->
+
+    <div ng-controller="loginCtrl">
+        <h1 ng-bind="name"></h1>  
+        <div class="g-signin2" data-onsuccess="onSignIn"></div>
+
+        <button onclick="signOut();">Sign out</button>
+        <script>
+            function signOut() {
+                var auth2 = gapi.auth2.getAuthInstance();
+                auth2.signOut().then(function () {
+                  console.log('User signed out.');
+                });
+            }
+        </script>
+        <hr>
     </div>
-  </div> -->
 
-<div ng-controller="loginCtrl">
-	<div class="g-signin2" data-onsuccess="onSignIn"></div>
+    <div ng-controller="travelGoalsCtrl">
+        <h3>Add Travel Goal</h3>
+        <form ng-submit="addTravelGoal()">
+          <div class="row">
+            <div class="six columns">
+                <label for="exampleEmailInput">Location</label>
+                <input class="u-full-width" type="text" placeholder="City/Country" ng-model="location">
+            </div>
+            <div class="six columns">
+                <label for="priority">Priority</label>
+                <select class="u-full-width" ng-model="priority">
+                    <option value="1">High</option>
+                    <option value="2">Medium</option>
+                    <option value="3">Low</option>
+                </select>
+            </div>
+        </div>
+        <label for="summary">Summary</label>
+        <textarea class="u-full-width" placeholder="Write your summary" ng-model="summary"></textarea>
+        <input class="button-primary" type="submit" value="Submit">
+        </form>
+    </div>
 </div>
-
-<button onclick="signOut();">Sign out</button>
-<script>
-    function signOut() {
-        var auth2 = gapi.auth2.getAuthInstance();
-        auth2.signOut().then(function () {
-          console.log('User signed out.');
-        });
-    }
-</script>
-
-
-
-
 
 <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
 <script src="app.js"></script>

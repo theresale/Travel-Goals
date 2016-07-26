@@ -26,8 +26,14 @@ app.post("/users", function(request, response){
 });
 
 app.post("/goals", function(request, response){
-	console.log(request.body);
  	databaseManager.saveTravelGoal(request.body.location, request.body.summary, request.body.priority, request.body.identity_id, function(result){
  		return response.send(result);
  	});
 });
+
+app.get("/goals", function(request, response){
+	databaseManager.readTravelGoals(request.query.identity_id, function(result){
+		return response.send(result);
+	});
+});
+
