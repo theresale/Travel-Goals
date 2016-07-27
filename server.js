@@ -54,13 +54,21 @@ app.get("/goals", function(request, response){
 	});
 });
 
-app.get("/flights", function(request,response){
-
+app.get("/cities", function(request,response){
 	var myCityIs = JSON.parse(fs.readFileSync('cities.json', 'utf8'));
+	var city = "Milwaukee";
+	response.send(myCityIs[city]);
+});
 
-	/* // GET DATA INTO BETTER FORMAT
+app.get("/countries", function(request,response){
+	var myCountryIs = JSON.parse(fs.readFileSync('countries.json', 'utf8'));
+	var country = "Ireland";
+	response.send(myCountryIs[country]);
+});
+
+/* // GET DATA INTO BETTER FORMAT
 	var url = "https://iatacodes.org/api/v6/cities?api_key=430d863a-093d-44db-ab0a-bb8555f2f12c&cities";
-	getJSON(url, function(error,city){
+	getJSON(url, function(error,data){
 		var rez = {};
 		for (var i = 0, len = data.response.length; i < len; i++) {
 		  rez[data.response[i].name] = data.response[i].code;
@@ -68,10 +76,5 @@ app.get("/flights", function(request,response){
 		console.log(JSON.stringify(rez, null, 2));
 	});
 	*/
-
-	var city = "Milwaukee";
-
-	response.send(myCityIs[city]);
-});
 
 

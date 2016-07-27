@@ -65,13 +65,24 @@ app.controller('travelGoalsCtrl', function($scope, $http, sendData){
 });
 
 app.controller('iataCtrl', function($scope, $http, sendData){
-	var city = "Milwaukee";
 	$scope.getIataCity = function(){
 		$http({
 			method:"GET",
-			url:"/flights"
+			url:"/cities"
 		}).then(function successCallback(data) {
-            console.log(data);
+            console.log(data.data);
+        },
+        function errorCallback(error) {
+            console.log(error);
+        });
+	};
+
+	$scope.getIataCountry = function(){
+		$http({
+			method:"GET",
+			url:"/countries"
+		}).then(function successCallback(data) {
+            console.log(data.data);
         },
         function errorCallback(error) {
             console.log(error);
