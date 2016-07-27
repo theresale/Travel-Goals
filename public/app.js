@@ -3,7 +3,7 @@
 var app = angular.module('myApp', []);
 
 
-app.controller('loginCtrl', function($scope, $http, sendData) {
+app.controller('loginCtrl', function($scope, $http, sendData, goalService, $rootScope) {
 	$scope.onSignIn = function(googleUser){
 		// var id_token = googleUser.getAuthResponse().id_token;
 		var id_token = googleUser.getBasicProfile().Ka;
@@ -21,13 +21,15 @@ app.controller('loginCtrl', function($scope, $http, sendData) {
 			        data: {id_token: id_token}
 			    }).then(function successCallback(data) {
 			    	sendData.identity_id = data.data.rows[0].id;
+			    	broadcastTravelGoalRequest();
 			        alert("Thank you for joining " + $scope.name + ", you may now start creating travel goals!");
 			    },
 			    function errorCallback(error) {
 			        console.log("error");
 			    });
             }else{
-			    sendData.identity_id = data.data.rows[0].id;
+            	sendData.identity_id = data.data.rows[0].id;
+			    broadcastTravelGoalRequest();
             	console.log("welcome back "+$scope.name);
             }
         },
@@ -35,23 +37,15 @@ app.controller('loginCtrl', function($scope, $http, sendData) {
             console.log(error);
         });
 	};
+
+	var broadcastTravelGoalRequest = function (){
+	    $rootScope.$broadcast('retrieveGoalsBroadcast');
+	}	
+
 	window.onSignIn = $scope.onSignIn;
 });
 
 app.controller('travelGoalsCtrl', function($scope, $http, sendData){
-	$scope.viewTravelGoals = function(){
-		$http({
-			method:"GET",
-			url:"/goals",
-			params: {identity_id: sendData.identity_id}
-		}).then(function successCallback(data) {
-            console.log(data);
-        },
-        function errorCallback(error) {
-            console.log(error);
-        });
-	};
-
 	$scope.addTravelGoal = function(){
 		$http({
 			method:"POST",
@@ -64,11 +58,47 @@ app.controller('travelGoalsCtrl', function($scope, $http, sendData){
             console.log(error);
         });
 	};
+
+	$scope.$on('goalsRetrievedBroadcast', function() {
+        $scope.goalsArray = sendData.goalsArray;
+    });
+});
+
+app.controller('iataCtrl', function($scope, $http, sendData){
+	var city = "Milwaukee";
+	$scope.getIataCity = function(){
+		$http({
+			method:"GET",
+			url:"/flights"
+		}).then(function successCallback(data) {
+            console.log(data);
+        },
+        function errorCallback(error) {
+            console.log(error);
+        });
+	};
 });
 
 app.service('sendData', function(){
     this.identity_id = 0;
 });
+
+app.service('goalService', function($http, sendData, $rootScope){
+	$rootScope.$on('retrieveGoalsBroadcast', function() {
+        $http({
+			method:"GET",
+			url:"/goals",
+			params: {identity_id: sendData.identity_id}
+		}).then(function successCallback(data) {
+       		sendData.goalsArray = data.data.rows;
+       		$rootScope.$broadcast('goalsRetrievedBroadcast');
+        },
+        function errorCallback(error) {
+            console.log(error);
+        });
+    });
+});
+
 
 
 

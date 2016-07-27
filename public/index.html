@@ -38,10 +38,29 @@
                 });
             }
         </script>
-        <hr>
     </div>
 
     <div ng-controller="travelGoalsCtrl">
+        <div class="row">
+            <div class="six columns">
+                <h3><b>Your Travel Goals</h3></b>
+            </div>
+            <div class="six columns">
+                <label for="priorityFilter">Priority</label>
+                    <select class="u-full-width" ng-model="priorityFilter">
+                        <option value="">All</option>
+                        <option value="1">High</option>
+                        <option value="2">Medium</option>
+                        <option value="3">Low</option>
+                    </select>
+            </div>
+        </div>
+    <div ng-repeat="goal in goalsArray | filter:priorityFilter">
+        <h4>{{goal.location}}</h4>
+        <p>{{goal.summary}}</p>
+        <br><hr><br>
+        </div>
+        
         <h3>Add Travel Goal</h3>
         <form ng-submit="addTravelGoal()">
           <div class="row">
@@ -63,7 +82,13 @@
         <input class="button-primary" type="submit" value="Submit">
         </form>
     </div>
+
+    <div ng-controller="iataCtrl">
+    <button ng-click="getIataCity()">Get IATA</button>
+    </div>
+
 </div>
+
 
 <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
 <script src="app.js"></script>
