@@ -37,13 +37,14 @@ app.get("/users", function(request, response){
 });
 
 app.post("/users", function(request, response){
- 	databaseManager.saveGoogleId(request.body.id_token, function(result){
+ 	databaseManager.saveGoogleId(request.body.id_token, request.body.home_city, function(result){
  		return response.send(result);
  	});
 });
 
 app.post("/goals", function(request, response){
- 	databaseManager.saveTravelGoal(request.body.location, request.body.summary, request.body.priority, request.body.identity_id, function(result){
+
+ 	databaseManager.saveTravelGoal(request.body.location, request.body.summary, request.body.location_type, request.body.priority, request.body.identity_id, function(result){
  		return response.send(result);
  	});
 });
@@ -56,14 +57,19 @@ app.get("/goals", function(request, response){
 
 app.get("/cities", function(request,response){
 	var myCityIs = JSON.parse(fs.readFileSync('cities.json', 'utf8'));
-	var city = "Milwaukee";
-	response.send(myCityIs[city]);
+	response.send(myCityIs);
 });
 
 app.get("/countries", function(request,response){
 	var myCountryIs = JSON.parse(fs.readFileSync('countries.json', 'utf8'));
-	var country = "Ireland";
-	response.send(myCountryIs[country]);
+	response.send(myCountryIs);
+});
+
+app.put("/users", function(request, response){
+	console.log(request.body);
+	databaseManager.updateHomeCity(request.body.home_city, request.body.id, function(result){
+		return response.send(result);
+	});
 });
 
 /* // GET DATA INTO BETTER FORMAT

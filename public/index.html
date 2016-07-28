@@ -25,8 +25,7 @@
       </div>
     </div> -->
 
-    <div ng-controller="loginCtrl">
-        <h1 ng-bind="name"></h1>  
+    <div ng-controller="userCtrl">  
         <div class="g-signin2" data-onsuccess="onSignIn"></div>
 
         <button onclick="signOut();">Sign out</button>
@@ -38,6 +37,19 @@
                 });
             }
         </script>
+        <br><br>
+        <div class="row">
+            <div class="six columns">
+                <h1 ng-bind="name"></h1>
+            </div>
+            <div class="six columns">
+                Homebase: {{home_city}}
+                <form ng-submit="updateHomeCity()">
+                    <input class="u-half-width" type="text" placeholder="City" ng-model="newHome_city">
+                    <input class="button-primary" type="submit" value="Update Home City">
+                </form>  
+            </div>
+        </div>
     </div>
 
     <div ng-controller="travelGoalsCtrl">
@@ -65,8 +77,13 @@
         <form ng-submit="addTravelGoal()">
           <div class="row">
             <div class="six columns">
-                <label for="exampleEmailInput">Location</label>
-                <input class="u-full-width" type="text" placeholder="City/Country" ng-model="location">
+                <label for="location">Location {{locationResponse}}</label>
+                <input class="u-half-width" ng-change="checkLocation()" type="text" placeholder="City/Country" ng-model="location">
+                <select ng-model="location_type">
+                        <option value="">Choose</option>
+                        <option value="country">Country</option>
+                        <option value="city">City</option>
+                </select>
             </div>
             <div class="six columns">
                 <label for="priority">Priority</label>
@@ -78,16 +95,10 @@
             </div>
         </div>
         <label for="summary">Summary</label>
-        <textarea class="u-full-width" placeholder="Write your summary" ng-model="summary"></textarea>
+        <textarea class="u-full-width" placeholder="Write your summary" ng-model="summary" required></textarea>
         <input class="button-primary" type="submit" value="Submit">
         </form>
     </div>
-
-    <div ng-controller="iataCtrl">
-    <button ng-click="getIataCity()">Get IATA City</button>
-    <button ng-click="getIataCountry()">Get IATA Country</button>
-    </div>
-
 </div>
 
 

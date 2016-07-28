@@ -15,9 +15,9 @@ module.exports = (function() {
 	
 	var pool = new Pool(config);
 
-	var checkGoogleId = function(id_token,callback) {
+	var checkGoogleId = function(id_token, callback) {
 		pool.query(
-			"SELECT id FROM identity"+
+			"SELECT id, home_city, home_city_code FROM identity"+
 			" WHERE id_token = $1;", [id_token], function(error, result) {
 				if (error) return console.error(error);
 				callback(result);
@@ -25,22 +25,23 @@ module.exports = (function() {
 		);
 	}
 
-	var saveGoogleId = function(id_token,callback) {
+	var saveGoogleId = function(id_token, home_city, callback) {
 		pool.query(
 			"INSERT INTO identity" + 
-			" (id_token)" +
-			" VALUES ($1) RETURNING id;", [id_token], function(error, result) { 
+			" (id_token, home_city)" +
+			" VALUES ($1, $2) RETURNING id;", [id_token, home_city], function(error, result) { 
 				if (error) return console.error(error);
 				callback(result);
 			}
 		);
 	}
 
-	var saveTravelGoal = function(location, summary, priority, identity_id, callback){
+	var saveTravelGoal = function(location, summary, location_type, priority, identity_id, callback){
+		console.log(identity_id);
 		pool.query(
 			"INSERT INTO travel_goal"+
-			" (location, summary, priority, identity_id)"+
-			" VALUES ($1, $2, $3, $4) RETURNING id;", [location, summary, priority, identity_id], function(error,result){
+			" (location, summary, location_type, priority, identity_id)"+
+			" VALUES ($1, $2, $3, $4, $5) RETURNING id;", [location, summary, location_type, priority, identity_id], function(error,result){
 				if (error) return console.error(error);
 				callback(result);
 			}
@@ -57,11 +58,23 @@ module.exports = (function() {
 		);
 	}
 
+	var updateHomeCity = function(home_city, id, callback){
+		pool.query(
+			"UPDATE identity"+
+			" SET home_city = $1"+
+			" WHERE id = $2;", [home_city, id], function(error, result){
+				if (error) return console.error(error);
+				callback(result);
+			}
+		);
+	}
+
 	return {
 		checkGoogleId: checkGoogleId,
 		saveGoogleId: saveGoogleId,
 		saveTravelGoal: saveTravelGoal,
-		readTravelGoals: readTravelGoals
+		readTravelGoals: readTravelGoals,
+		updateHomeCity: updateHomeCity
 	};
 
 })();

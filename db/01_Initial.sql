@@ -4,14 +4,18 @@ DROP TABLE IF EXISTS goal_notes;
 
 CREATE TABLE  identity (
 	id 				serial PRIMARY KEY,
-	id_token 		text NOT NULL
+	id_token 		numeric NOT NULL,
+	home_city		text,
+	home_city_code  text
 );
 
 ALTER TABLE identity OWNER TO travel_goal_server;
 
 CREATE TABLE travel_goal (
 	id 				serial PRIMARY KEY,
+	location_type	text,
 	location 		text,
+	location_code	text,
 	summary			text,
 	priority		text,
 	identity_id 	integer,
