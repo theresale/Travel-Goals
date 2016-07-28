@@ -36,12 +36,12 @@ module.exports = (function() {
 		);
 	}
 
-	var saveTravelGoal = function(location, summary, location_type, priority, identity_id, callback){
+	var saveTravelGoal = function(location, summary, location_type, location_code, priority, identity_id, callback){
 		console.log(identity_id);
 		pool.query(
 			"INSERT INTO travel_goal"+
-			" (location, summary, location_type, priority, identity_id)"+
-			" VALUES ($1, $2, $3, $4, $5) RETURNING id;", [location, summary, location_type, priority, identity_id], function(error,result){
+			" (location, summary, location_type, location_code, priority, identity_id)"+
+			" VALUES ($1, $2, $3, $4, $5, $6) RETURNING id;", [location, summary, location_type, location_code, priority, identity_id], function(error,result){
 				if (error) return console.error(error);
 				callback(result);
 			}
@@ -58,11 +58,12 @@ module.exports = (function() {
 		);
 	}
 
-	var updateHomeCity = function(home_city, id, callback){
+	var updateHomeCity = function(home_city, home_city_code, id, callback){
 		pool.query(
 			"UPDATE identity"+
-			" SET home_city = $1"+
-			" WHERE id = $2;", [home_city, id], function(error, result){
+			" SET home_city = $1,"+
+			" home_city_code = $2"+
+			" WHERE id = $3;", [home_city, home_city_code, id], function(error, result){
 				if (error) return console.error(error);
 				callback(result);
 			}

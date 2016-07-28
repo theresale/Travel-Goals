@@ -44,7 +44,7 @@ app.post("/users", function(request, response){
 
 app.post("/goals", function(request, response){
 
- 	databaseManager.saveTravelGoal(request.body.location, request.body.summary, request.body.location_type, request.body.priority, request.body.identity_id, function(result){
+ 	databaseManager.saveTravelGoal(request.body.location, request.body.summary, request.body.location_type, request.body.location_code, request.body.priority, request.body.identity_id, function(result){
  		return response.send(result);
  	});
 });
@@ -67,7 +67,7 @@ app.get("/countries", function(request,response){
 
 app.put("/users", function(request, response){
 	console.log(request.body);
-	databaseManager.updateHomeCity(request.body.home_city, request.body.id, function(result){
+	databaseManager.updateHomeCity(request.body.home_city, request.body.home_city_code, request.body.id, function(result){
 		return response.send(result);
 	});
 });

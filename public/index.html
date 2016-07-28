@@ -43,9 +43,10 @@
                 <h1 ng-bind="name"></h1>
             </div>
             <div class="six columns">
-                Homebase: {{home_city}}
+                Homebase: {{home_city}} {{homeCityResponse}}
                 <form ng-submit="updateHomeCity()">
-                    <input class="u-half-width" type="text" placeholder="City" ng-model="newHome_city">
+                    <input class="u-half-width" type="text" placeholder="City"
+                           ng-change="checkNewHomeCity()" ng-model="newHome_city" required>
                     <input class="button-primary" type="submit" value="Update Home City">
                 </form>  
             </div>
@@ -78,7 +79,7 @@
           <div class="row">
             <div class="six columns">
                 <label for="location">Location {{locationResponse}}</label>
-                <input class="u-half-width" ng-change="checkLocation()" type="text" placeholder="City/Country" ng-model="location">
+                <input class="u-half-width" ng-change="checkLocation()" type="text" placeholder="City/Country" ng-model="location" required>
                 <select ng-model="location_type">
                         <option value="">Choose</option>
                         <option value="country">Country</option>

@@ -46,11 +46,20 @@ app.controller('userCtrl', function($scope, $http, sendData, goalService, $rootS
 
 	window.onSignIn = $scope.onSignIn;
 
+	$scope.checkNewHomeCity = function(){
+		$rootScope.$broadcast('getIataCity');
+		if(sendData.citiesArray[$scope.newHome_city]){
+			$scope.homeCityResponse = "/ "+sendData.citiesArray[$scope.newHome_city];
+		}else{
+			$scope.homeCityResponse = "/ Please choose a valid city.";
+		};
+	}
+
 	$scope.updateHomeCity = function(){
 		$http({
 			method: "PUT",
 			url:"/users",
-			data: {home_city: $scope.newHome_city, id: sendData.identity_id}
+			data: {id: sendData.identity_id, home_city: $scope.newHome_city, home_city_code: sendData.citiesArray[$scope.newHome_city]}
 			}).then(function successCallback(data){		   
 			},
 		    function errorCallback(error) {
@@ -79,29 +88,20 @@ app.controller('travelGoalsCtrl', function($scope, $rootScope, $http, sendData, 
 			};
 		}else if($scope.location_type == undefined){
 			$scope.locationResponse = ": Please choose City or Country";
-		}
-		// console.log(sendData.countriesArray["Afghanistan"]);
-		// console.log(sendData.countriesArray["Ireland"]);
-		// for (var country in sendData.countriesArray) {
-		// 	if (sendData.countriesArray[country] === "IRL") {
-		// 		console.log(country);
-		// 	}
-		// }
-		// console.log(sendData.citiesArray);
-		// console.log(sendData.countriesArray);
-		
-		// if(sendData.citiesArray[$scope.location]){
-		// 	// $scope.locationResponse = 
-		// }else{
-		// 	$scope.locationResponse = "Please choose a valid city.";
-		// };
+		};
+		// FROM 3 CHARACTER CODE TO LOCATION NAME -->
+			// for (var country in sendData.countriesArray) {
+			// 	if (sendData.countriesArray[country] === "IRL") {
+			// 		console.log(country);
+			// 	}
+			// }
 	};
 
 	$scope.addTravelGoal = function(){
 		$http({
 			method:"POST",
 			url:"/goals",
-			data: {location: $scope.location, summary: $scope.summary, location_type: $scope.location_type, priority: $scope.priority, identity_id: sendData.identity_id}
+			data: {location: $scope.location, summary: $scope.summary, location_type: $scope.location_type, location_code:sendData.countriesArray[$scope.location], priority: $scope.priority, identity_id: sendData.identity_id}
 		}).then(function successCallback(data) {
             console.log(data);
         },
