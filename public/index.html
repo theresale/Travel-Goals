@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html id="background">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -32,53 +32,48 @@
     </div>
 </div>
 
-<div class="navCtrl" ng-show="showNav()">
-    <nav>
-    <img src="/images/travel_goals-icon-wt.png" style="width:10%;height:10%;">
-    </nav>
-</div>
-
+<div class="subNav" id="nav">
 <div class="container">
     <div ng-controller="userCtrl">
         <center>  
         <div class="g-signin2" data-onsuccess="onSignIn" ng-show="showSignIn()"></div>
         </center>
-        <div align="right">
-        <a href="localhost:3000" onclick="signOut();" ng-show="showSignOut()">SIGN OUT</a>
-        <script>
-            function signOut() {
-                var auth2 = gapi.auth2.getAuthInstance();
-                auth2.signOut().then(function () {
-                    window.location.reload();
-                  console.log('User signed out.');
-                });
-            }
-        </script>
-        </div>
-        <br><br>
         <div class="row">
-            <div class="six columns">
-            <h1></h1>
-                <!-- <h3 ng-bind="name"></h3> -->
+            <div class="one columns" ng-show="showSignOut()">
+                <img src="/images/travel_goals-icon-wt.png" style="width:150%;height:150%;">
             </div>
-            <div class="six columns" ng-show="showHomeCity()">
+            <div class="four columns" ng-show="showHomeCity()">
                 Homebase: {{home_city}} {{homeCityResponse}}
                 <form ng-submit="updateHomeCity()">
                     <input class="u-half-width" type="text" placeholder="City"
                            ng-change="checkNewHomeCity()" ng-model="newHome_city" required>
-                    <input class="button-primary" type="submit" value="Update Home City">
-                </form>  
+                    <input class="button-primary" type="submit" value="Update">
+                </form>
+            </div>
+            <div class="seven columns" align="right">
+                <a href="localhost:3000" onclick="signOut();" ng-show="showSignOut()">SIGN OUT</a>
+                <script>
+                    function signOut() {
+                        var auth2 = gapi.auth2.getAuthInstance();
+                        auth2.signOut().then(function () {
+                        window.location.reload();
+                        console.log('User signed out.');
+                        });
+                    }
+                </script>
             </div>
         </div>        
     </div>
+</div>
+</div>
     
-
+<div class="container">
     <div ng-controller="travelGoalsCtrl" ng-show="showGoals()">
         <div class="row">
-            <div class="six columns">
-                <h4><b>Your Travel Goals</h4></b>
+            <div class="eight columns"><br><br><br>
+                <h3><b>Your Travel Goals</h3></b>
             </div>
-            <div class="six columns">
+            <div class="four columns"><br><br><br>
                     <select class="u-full-width" ng-model="priorityFilter">
                         <option value="">All</option>
                         <option value="1">High</option>
@@ -120,7 +115,7 @@
         <h4>Add Travel Goal</h4>
         <form ng-submit="addTravelGoal()">
           <div class="row">
-            <div class="six columns">
+            <div class="eight columns">
                 <label for="location">Location {{locationResponse}}</label>
                 <input class="u-half-width" ng-change="checkLocation()" type="text" placeholder="City/Country" ng-model="location" required>
                 <select ng-model="location_type">
@@ -129,7 +124,7 @@
                         <option value="city">City</option>
                 </select>
             </div>
-            <div class="six columns">
+            <div class="four columns">
                 <label for="priority">Priority</label>
                 <select class="u-full-width" ng-model="priority">
                     <option value="1">High</option>

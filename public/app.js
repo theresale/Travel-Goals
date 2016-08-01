@@ -51,6 +51,8 @@ app.controller('userCtrl', function($scope, $http, sendData, goalService, $rootS
 			    	displayService.showGoals = true;
 			    	displayService.showHomeCity = true;
 			    	displayService.showSignOut = true;
+			    	document.getElementById("background").style.backgroundImage = none;
+			    	document.getElementById("nav").style.backgroundColor = "#173526";
 		
 			    	broadcastTravelGoalRequest();
 			        alert("Thank you for joining " + $scope.name + ", you may now start creating travel goals!");
@@ -68,6 +70,8 @@ app.controller('userCtrl', function($scope, $http, sendData, goalService, $rootS
             	displayService.showGoals = true;
             	displayService.showHomeCity = true;
             	displayService.showSignOut = true;
+            	document.getElementById("background").style.backgroundImage = "none";
+            	document.getElementById("nav").style.backgroundColor = "#173526";
 
 			    broadcastTravelGoalRequest();
             	console.log("welcome back "+$scope.name);
