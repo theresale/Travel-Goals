@@ -14,10 +14,10 @@ app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
   extended: true
 })); 
 
-var https = require("https"); //middleware - allows you to do https
+var http = require("http"); //middleware - allows you to do https
 
 function getJSON(url, callback) { //replacement for $.getJSON
-	https.get(url, (response) => {
+	http.get(url, (response) => {
 		var body = '';
 		response.on('data', function(d) {
 			body += d;
@@ -25,7 +25,7 @@ function getJSON(url, callback) { //replacement for $.getJSON
 		response.on('end', function() {
 			callback(null, JSON.parse(body));
 		});
-	}).on('error', function(e) { //e is a common convention for error, which is why the functino is named e
+	}).on('error', function(e) { 
 		callback(e);
 	});
 }
@@ -66,11 +66,40 @@ app.get("/countries", function(request,response){
 });
 
 app.put("/users", function(request, response){
-	console.log(request.body);
 	databaseManager.updateHomeCity(request.body.home_city, request.body.home_city_code, request.body.id, function(result){
 		return response.send(result);
 	});
 });
+
+app.get("/flights", function(request, response){
+	var home = request.query.home_city_code;
+	var dest = request.query.location_code;
+	var url = "http://partners.api.skyscanner.net/apiservices/browsedates/v1.0/US/USD/en-US/"+home+"/"+dest+"/anytime?apiKey=th111691948788352142736655493904";
+	getJSON(url, function(error,data){
+		response.send(data);
+		
+	})
+});
+
+app.delete("/goals", function(request,response){
+	databaseManager.deleteGoal(request.query.id, function(result){
+		return response.send(result);
+	});
+});
+
+// databaseManager.saveLocation(request.query.latitude, request.query.longitude, date, function(locationId){
+// 			for(var i = 0; i<5;i++){
+// 				//console.log(data.daily.data[i]);
+// 			databaseManager.saveForecast(Math.round(data.daily.data[i].apparentTemperatureMax),
+// 									 Math.round(data.daily.data[i].apparentTemperatureMin),
+// 									 data.daily.data[i].summary,
+// 									 data.daily.data[i].precipProbability,
+// 									 locationId);
+// 			} 
+// 		});
+// 		response.send(JSON.stringify(data));
+// 	});
+
 
 /* // GET DATA INTO BETTER FORMAT
 	var url = "https://iatacodes.org/api/v6/cities?api_key=430d863a-093d-44db-ab0a-bb8555f2f12c&cities";

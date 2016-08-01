@@ -1,9 +1,31 @@
 "use strict";
 
 var app = angular.module('myApp', []);
+//angular.module('myModule', ['chart.js']);
 
+app.controller('homeCtrl', function($scope, displayService){
+	$scope.showHome = function(){
+        return displayService.showHome;
+    };
+});
 
-app.controller('userCtrl', function($scope, $http, sendData, goalService, $rootScope) {
+app.controller('navCtrl', function($scope, displayService){
+	$scope.showNav = function(){
+		return displayService.showNav;
+	};
+});
+
+app.controller('userCtrl', function($scope, $http, sendData, goalService, $rootScope, displayService) {
+	$scope.showSignIn = function(){
+        return displayService.showSignIn;
+    };
+    $scope.showHomeCity = function(){
+        return displayService.showHomeCity;
+    };
+    $scope.showSignOut = function(){
+        return displayService.showSignOut;
+    };
+
 	$scope.onSignIn = function(googleUser){
 		// var id_token = googleUser.getAuthResponse().id_token;
 		var id_token = googleUser.getBasicProfile().Ka;
@@ -22,6 +44,14 @@ app.controller('userCtrl', function($scope, $http, sendData, goalService, $rootS
 			    }).then(function successCallback(data) {
 			    	sendData.identity_id = data.data.rows[0].id;
 			    	$scope.home_city = data.data.rows[0].home_city;
+			    	sendData.home_city_code = data.data.rows[0].home_city_code;
+			    	displayService.showSignIn = false;
+			    	displayService.showHome = false;
+			    	displayService.showNav = true;
+			    	displayService.showGoals = true;
+			    	displayService.showHomeCity = true;
+			    	displayService.showSignOut = true;
+		
 			    	broadcastTravelGoalRequest();
 			        alert("Thank you for joining " + $scope.name + ", you may now start creating travel goals!");
 			    },
@@ -31,6 +61,14 @@ app.controller('userCtrl', function($scope, $http, sendData, goalService, $rootS
             }else{
             	sendData.identity_id = data.data.rows[0].id;
             	$scope.home_city = data.data.rows[0].home_city;
+            	sendData.home_city_code = data.data.rows[0].home_city_code;
+            	displayService.showSignIn = false;
+            	displayService.showHome = false;
+            	displayService.showNav = true;
+            	displayService.showGoals = true;
+            	displayService.showHomeCity = true;
+            	displayService.showSignOut = true;
+
 			    broadcastTravelGoalRequest();
             	console.log("welcome back "+$scope.name);
             }
@@ -68,7 +106,15 @@ app.controller('userCtrl', function($scope, $http, sendData, goalService, $rootS
 	};
 });
 
-app.controller('travelGoalsCtrl', function($scope, $rootScope, $http, sendData, iataService){
+app.controller('travelGoalsCtrl', function($scope, $rootScope, $http, sendData, iataService, displayService){
+	$scope.showGoals = function(){
+        return displayService.showGoals;
+    };
+
+    $scope.showFlights = function(){
+        return displayService.showFlights;
+    };
+
 	$rootScope.$broadcast('getIataCountry');
 	$rootScope.$broadcast('getIataCity');
 	$scope.priority = "1";
@@ -98,11 +144,18 @@ app.controller('travelGoalsCtrl', function($scope, $rootScope, $http, sendData, 
 	};
 
 	$scope.addTravelGoal = function(){
+		if ($scope.location_type == "city"){
+			var code = sendData.citiesArray[$scope.location];
+		}else if($scope.location_type == "country"){
+			var code = sendData.countriesArray[$scope.location];
+		};
+
 		$http({
 			method:"POST",
 			url:"/goals",
-			data: {location: $scope.location, summary: $scope.summary, location_type: $scope.location_type, location_code:sendData.countriesArray[$scope.location], priority: $scope.priority, identity_id: sendData.identity_id}
+			data: {location: $scope.location, summary: $scope.summary, location_type: $scope.location_type, location_code: code, priority: $scope.priority, identity_id: sendData.identity_id}
 		}).then(function successCallback(data) {
+			window.location.reload();
             console.log(data);
         },
         function errorCallback(error) {
@@ -113,7 +166,35 @@ app.controller('travelGoalsCtrl', function($scope, $rootScope, $http, sendData, 
 	$scope.$on('goalsRetrievedBroadcast', function() {
         $scope.goalsArray = sendData.goalsArray;
     });
+
+    $scope.flightTest = function(location_code){
+    	$http({
+    		method:"GET",
+    		url: "/flights",
+    		params: {home_city_code: sendData.home_city_code, location_code: location_code}
+    	}).then(function successCallback(data){
+    		$scope.priceByMonthArray = data.data.Dates.OutboundDates;
+    		displayService.showFlights = true;
+    		//console.log($scope.priceByMonthArray);
+    		console.log(data);
+    	},
+    	function errorCallback(error){
+    	});
+    };
+
+    $scope.deleteGoal = function(id){
+    	$http({
+    		method:"DELETE",
+    		url: "/goals",
+    		params: {id: id}
+    	}).then(function successCallback(data){
+    		console.log(data);
+    	},
+    	function errorCallback(error){
+    	});
+    };
 });
+
 
 app.service('iataService', function($rootScope, $http, sendData){
 	$rootScope.$on('getIataCity', function(){
@@ -157,13 +238,47 @@ app.service('goalService', function($http, sendData, $rootScope){
     });
 });
 
+app.filter('dateFilter', function() {
+	return function(date) {
+		var d = new Date(date);
+			console.log(d);
+
+			var month = new Array();
+			month[0] = "Jan";
+			month[1] = "Feb";
+			month[2] = "Mar";
+			month[3] = "Apr";
+			month[4] = "May";
+			month[5] = "Jun";
+			month[6] = "Jul";
+			month[7] = "Aug";
+			month[8] = "Sept";
+			month[9] = "Oct";
+			month[10] = "Nov";
+			month[11] = "Dec";
+			var n = month[d.getMonth()];
+		return n+", "+d.getFullYear();
+	};
+});
+
 app.service('sendData', function(){
     this.identity_id = 0;
     this.home_city;
+    this.home_city_code;
     this.citiesArray;
     this.countriesArray;
 });
 
+app.service('displayService', function(){
+	this.showHome = true;
+	this.showSignIn = true;
+	this.showGoals = false;
+	this.showHomeCity = false;
+	this.showSignOut = false;
+	this.showFlights = false;
+	this.showNav = false;
+    
+});
 
 
 

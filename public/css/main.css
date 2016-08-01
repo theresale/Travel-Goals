@@ -1,0 +1,38 @@
+header {
+	background: url('/images/background.jpg') no-repeat center center;
+	min-height:100%;
+	background-size:cover;
+}
+
+@font-face {
+    font-family: title;
+    src: url(/fonts/pier-regular.otf);
+}
+
+@font-face {
+    font-family: title_bold;
+    src: url(/fonts/pier-bold.otf);
+}
+
+h1 {
+	font-family: title_bold;
+}
+
+h2, h3, h4, h5 {
+	font-family: title;
+	color: #173526;
+}
+
+body {
+	font-family: 'Cardo', serif;
+}
+
+nav {
+	background-color: #173526;
+	font-family: title_bold;
+	color: white;
+	font-size: 5.0rem;
+	padding: 10px;
+	margin-left: 10px;
+}
+

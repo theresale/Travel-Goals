@@ -158,9 +158,13 @@ p {
 /* Links
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
 a {
-  color: #1EAEDB; }
+  color: #2d2521; 
+  font-family: title;
+  text-decoration:none}
 a:hover {
-  color: #0FA0CE; }
+  color: #e4590d;; 
+  font-family: title;
+  text-decoration:none}
 
 
 /* Buttons
@@ -173,18 +177,19 @@ input[type="button"] {
   display: inline-block;
   height: 38px;
   padding: 0 30px;
-  color: #555;
+  color: white;
   text-align: center;
   font-size: 11px;
   font-weight: 600;
+  font-family: title;
   line-height: 38px;
   letter-spacing: .1rem;
   text-transform: uppercase;
   text-decoration: none;
   white-space: nowrap;
-  background-color: transparent;
+  background-color: #e4590d;
   border-radius: 4px;
-  border: 1px solid #bbb;
+  border: 0px solid #bbb;
   cursor: pointer;
   box-sizing: border-box; }
 .button:hover,
@@ -206,8 +211,8 @@ input[type="submit"].button-primary,
 input[type="reset"].button-primary,
 input[type="button"].button-primary {
   color: #FFF;
-  background-color: #33C3F0;
-  border-color: #33C3F0; }
+  background-color: #2d2521;
+  border-color: #2d2521; }
 .button.button-primary:hover,
 button.button-primary:hover,
 input[type="submit"].button-primary:hover,
@@ -219,8 +224,8 @@ input[type="submit"].button-primary:focus,
 input[type="reset"].button-primary:focus,
 input[type="button"].button-primary:focus {
   color: #FFF;
-  background-color: #1EAEDB;
-  border-color: #1EAEDB; }
+  background-color: #020202;
+  border-color: #020202; }
 
 
 /* Forms
@@ -237,7 +242,7 @@ select {
   height: 38px;
   padding: 6px 10px; /* The 6px vertically centers text on FF, ignored by Webkit */
   background-color: #fff;
-  border: 1px solid #D1D1D1;
+  border: 2px solid #D1D1D1;
   border-radius: 4px;
   box-shadow: none;
   box-sizing: border-box; }
@@ -266,7 +271,7 @@ input[type="url"]:focus,
 input[type="password"]:focus,
 textarea:focus,
 select:focus {
-  border: 1px solid #33C3F0;
+  border: 1px solid #e4590d;
   outline: 0; }
 label,
 legend {
@@ -322,7 +327,13 @@ pre > code {
 
 /* Tables
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
-th,
+th {
+  font-family: title;
+  text-align: left;
+  padding: 12px 15px;
+  border-bottom: 1px solid #E1E1E1;
+  color: #173526;
+}
 td {
   padding: 12px 15px;
   text-align: left;
@@ -377,7 +388,7 @@ hr {
   margin-top: 3rem;
   margin-bottom: 3.5rem;
   border-width: 0;
-  border-top: 1px solid #E1E1E1; }
+  border-top: 3px solid #E1E1E1; }
 
 
 /* Clearing

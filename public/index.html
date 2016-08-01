@@ -7,7 +7,9 @@
     <link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="css/normalize.css">
     <link rel="stylesheet" href="css/skeleton.css">
-    <link rel="icon" type="image/png" href="images/favicon.png"><!--change this icon!!!!-->
+    <link rel="stylesheet" href="css/main.css">
+    <link href='https://fonts.googleapis.com/css?family=Cardo' rel='stylesheet' type='text/css'>
+    <link rel="icon" type="image/png" href="images/travel_goals-icon.png">
     <meta name="description" content="Create travel goals">
     <meta name="keyword" content="Travel, Goals, Destination, Cheap, Flights, Inspiration">
     <meta name="author" content="Theresa Le">
@@ -18,31 +20,48 @@
 <body ng-app="myApp">
 
 <div class="container">
-   <!--  <div class="row">
-      <div class="one-half column" style="margin-top: 25%">
-        <h4>Travel Goals</h4>
-        <p>This index.html page is a placeholder with the CSS, font and favicon. It's just waiting for you to add some content! If you need some help hit up the <a href="http://www.getskeleton.com">Skeleton documentation</a>.</p>
-      </div>
-    </div> -->
+    <div ng-controller="homeCtrl" ng-show="showHome()">
+        <div class="row">
+        <div style="margin-top: 5%">
+        <center>
+            <img src="/images/travel-goals.png" alt="Travel Goals" style="width:50%;height:50%;">
+            <h5 style="color:black;">DREAM&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PLAN&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TRAVEL</h5><br><br>
+        </center>
+        </div>
+        </div> 
+    </div>
+</div>
 
-    <div ng-controller="userCtrl">  
-        <div class="g-signin2" data-onsuccess="onSignIn"></div>
+<div class="navCtrl" ng-show="showNav()">
+    <nav>
+    <img src="/images/travel_goals-icon-wt.png" style="width:10%;height:10%;">
+    </nav>
+</div>
 
-        <button onclick="signOut();">Sign out</button>
+<div class="container">
+    <div ng-controller="userCtrl">
+        <center>  
+        <div class="g-signin2" data-onsuccess="onSignIn" ng-show="showSignIn()"></div>
+        </center>
+        <div align="right">
+        <a href="localhost:3000" onclick="signOut();" ng-show="showSignOut()">SIGN OUT</a>
         <script>
             function signOut() {
                 var auth2 = gapi.auth2.getAuthInstance();
                 auth2.signOut().then(function () {
+                    window.location.reload();
                   console.log('User signed out.');
                 });
             }
         </script>
+        </div>
         <br><br>
         <div class="row">
             <div class="six columns">
-                <h1 ng-bind="name"></h1>
+            <h1></h1>
+                <!-- <h3 ng-bind="name"></h3> -->
             </div>
-            <div class="six columns">
+            <div class="six columns" ng-show="showHomeCity()">
                 Homebase: {{home_city}} {{homeCityResponse}}
                 <form ng-submit="updateHomeCity()">
                     <input class="u-half-width" type="text" placeholder="City"
@@ -50,31 +69,55 @@
                     <input class="button-primary" type="submit" value="Update Home City">
                 </form>  
             </div>
-        </div>
+        </div>        
     </div>
+    
 
-    <div ng-controller="travelGoalsCtrl">
+    <div ng-controller="travelGoalsCtrl" ng-show="showGoals()">
         <div class="row">
             <div class="six columns">
-                <h3><b>Your Travel Goals</h3></b>
+                <h4><b>Your Travel Goals</h4></b>
             </div>
             <div class="six columns">
-                <label for="priorityFilter">Priority</label>
                     <select class="u-full-width" ng-model="priorityFilter">
                         <option value="">All</option>
                         <option value="1">High</option>
                         <option value="2">Medium</option>
                         <option value="3">Low</option>
+                        <option value="4">Hide</option>
                     </select>
             </div>
         </div>
-    <div ng-repeat="goal in goalsArray | filter:priorityFilter">
-        <h4>{{goal.location}}</h4>
-        <p>{{goal.summary}}</p>
-        <br><hr><br>
+        <hr>
+    <div ng-repeat="(i, goal) in goalsArray | filter:priorityFilter">
+        <h5>{{goal.location}}</h5>
+        <p>{{goal.summary}}</p><br>
+
+        <button ng-click="flightTest(goal.location_code)">FLIGHTS</button>
+
+            <table class="u-full-width" ng-show="showFlights()">
+              <thead>
+                <tr>
+                  <th>Month</th>
+                  <th>Cheapest Outbound Price</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr ng-repeat="data in priceByMonthArray | orderBy: 'PartialDate'">
+                  <td>{{data.PartialDate|dateFilter}}</td>
+                  <td>${{data.Price}}</td>
+                </tr>
+              </tbody>
+            </table>
+
+        <br><br>
+        <div align="right">
+        <button class="button-primary" ng-click="deleteGoal(goal.id)">DELETE</button>
+        </div>
+        <hr><br>
         </div>
         
-        <h3>Add Travel Goal</h3>
+        <h4>Add Travel Goal</h4>
         <form ng-submit="addTravelGoal()">
           <div class="row">
             <div class="six columns">
@@ -97,15 +140,16 @@
         </div>
         <label for="summary">Summary</label>
         <textarea class="u-full-width" placeholder="Write your summary" ng-model="summary" required></textarea>
-        <input class="button-primary" type="submit" value="Submit">
+        <input class="button" type="submit" value="Submit">
         </form>
     </div>
 </div>
 
-
 <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
 <script src="app.js"></script>
 <script src="https://apis.google.com/js/platform.js?onload=onLoadCallback" async defer></script>
+<!-- <script src="node_modules/chart.js/Chart.min.js"></script>
+<script src="node_modules/angular-chart.js/dist/angular-chart.min.js"></script> -->
 
 </body>
 </html>

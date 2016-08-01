@@ -50,7 +50,7 @@ module.exports = (function() {
 
 	var readTravelGoals = function(identity_id, callback){
 		pool.query(
-			"SELECT location, summary, priority, id FROM travel_goal"+
+			"SELECT location, location_code, summary, priority, id FROM travel_goal"+
 			" WHERE identity_id = $1;", [identity_id], function(error, result) {
 				if (error) return console.error(error);
 				callback(result);
@@ -70,12 +70,23 @@ module.exports = (function() {
 		);
 	}
 
+	var deleteGoal = function(id, callback){
+		pool.query(
+			"DELETE FROM travel_goal"+
+			" WHERE id = $1;", [id], function(error,result){
+				if (error) return console.error(error);
+				callback(result);	
+			}
+		);
+	}
+
 	return {
 		checkGoogleId: checkGoogleId,
 		saveGoogleId: saveGoogleId,
 		saveTravelGoal: saveTravelGoal,
 		readTravelGoals: readTravelGoals,
-		updateHomeCity: updateHomeCity
+		updateHomeCity: updateHomeCity,
+		deleteGoal: deleteGoal
 	};
 
 })();
