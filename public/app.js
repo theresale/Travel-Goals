@@ -93,7 +93,7 @@ app.controller('userCtrl', function($scope, $http, sendData, goalService, $rootS
 		if(sendData.citiesArray[$scope.newHome_city]){
 			$scope.homeCityResponse = "/ "+sendData.citiesArray[$scope.newHome_city];
 		}else{
-			$scope.homeCityResponse = "/ Please choose a valid city.";
+			$scope.homeCityResponse = "/ Choose a valid city.";
 		};
 	}
 
@@ -115,7 +115,7 @@ app.controller('travelGoalsCtrl', function($scope, $rootScope, $http, sendData, 
         return displayService.showGoals;
     };
 
-    $scope.showFlights = function(){
+    $scope.showFlights = function(goal){
         return displayService.showFlights;
     };
 
@@ -180,7 +180,7 @@ app.controller('travelGoalsCtrl', function($scope, $rootScope, $http, sendData, 
     		$scope.priceByMonthArray = data.data.Dates.OutboundDates;
     		displayService.showFlights = true;
     		//console.log($scope.priceByMonthArray);
-    		console.log(data);
+    		console.log(data.config.params.location_code);
     	},
     	function errorCallback(error){
     	});
@@ -198,7 +198,6 @@ app.controller('travelGoalsCtrl', function($scope, $rootScope, $http, sendData, 
     	});
     };
 });
-
 
 app.service('iataService', function($rootScope, $http, sendData){
 	$rootScope.$on('getIataCity', function(){
@@ -283,7 +282,4 @@ app.service('displayService', function(){
 	this.showNav = false;
     
 });
-
-
-
-         
+       

@@ -87,6 +87,14 @@ app.delete("/goals", function(request,response){
 	});
 });
 
+app.post("/goals", function (request, response){
+	console.log(request.body.note);
+	console.log(request.body.travel_goal_id);
+	databaseManager.saveNote(request.body.note, request.body.travel_goal_id, function(result){
+		return response.send(result);
+	});
+});
+
 // databaseManager.saveLocation(request.query.latitude, request.query.longitude, date, function(locationId){
 // 			for(var i = 0; i<5;i++){
 // 				//console.log(data.daily.data[i]);

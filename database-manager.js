@@ -80,13 +80,25 @@ module.exports = (function() {
 		);
 	}
 
+	var saveNote = function(note, travel_goal_id, callback){
+		pool.query(
+			"INSERT INTO goal_notes"+
+			" (note, travel_goal_id)"+
+			" VALUES ($1, $2) RETURNING id", [note, travel_goal_id], function(error, result){
+				if (error) return console.error(error);
+				callback(result);
+			}
+		);
+	}
+
 	return {
 		checkGoogleId: checkGoogleId,
 		saveGoogleId: saveGoogleId,
 		saveTravelGoal: saveTravelGoal,
 		readTravelGoals: readTravelGoals,
 		updateHomeCity: updateHomeCity,
-		deleteGoal: deleteGoal
+		deleteGoal: deleteGoal,
+		saveNote: saveNote
 	};
 
 })();

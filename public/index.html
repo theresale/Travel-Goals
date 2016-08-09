@@ -43,7 +43,7 @@
                 <img src="/images/travel_goals-icon-wt.png" style="width:150%;height:150%;">
             </div>
             <div class="four columns" ng-show="showHomeCity()">
-                Homebase: {{home_city}} {{homeCityResponse}}
+                <span style="color:white">Homebase: {{home_city}} {{homeCityResponse}}</span>
                 <form ng-submit="updateHomeCity()">
                     <input class="u-half-width" type="text" placeholder="City"
                            ng-change="checkNewHomeCity()" ng-model="newHome_city" required>
@@ -84,33 +84,47 @@
             </div>
         </div>
         <hr>
-    <div ng-repeat="(i, goal) in goalsArray | filter:priorityFilter">
-        <h5>{{goal.location}}</h5>
-        <p>{{goal.summary}}</p><br>
-
-        <button ng-click="flightTest(goal.location_code)">FLIGHTS</button>
-
-            <table class="u-full-width" ng-show="showFlights()">
-              <thead>
-                <tr>
-                  <th>Month</th>
-                  <th>Cheapest Outbound Price</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr ng-repeat="data in priceByMonthArray | orderBy: 'PartialDate'">
-                  <td>{{data.PartialDate|dateFilter}}</td>
-                  <td>${{data.Price}}</td>
-                </tr>
-              </tbody>
-            </table>
-
-        <br><br>
-        <div align="right">
-        <button class="button-primary" ng-click="deleteGoal(goal.id)">DELETE</button>
+    <div ng-repeat="goal in goalsArray | filter:priorityFilter">
+        <div class="row">
+                <h5>{{goal.location}}</h5>
         </div>
-        <hr><br>
+        <div class="row">
+        <div class="twelve columns">
+                <p>{{goal.summary}}</p><br>
+
+                <button ng-click="flightTest(goal.location_code)">FLIGHTS</button>
+
+                    <table class="u-full-width" ng-show="showFlights(goal)">
+                      <thead>
+                        <tr>
+                          <th>Month</th>
+                          <th>Cheapest Outbound Price</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr ng-repeat="data in priceByMonthArray | orderBy: 'PartialDate'">
+                          <td>{{data.PartialDate|dateFilter}}</td>
+                          <td>${{data.Price}}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                <br><br>
         </div>
+        <!-- <div class="six columns">
+        <p class="">Notes</p>
+
+            <form ng-submit="">
+                    <input class="u-half-width" type="text" placeholder="Note" ng-model="note" required>
+                    <input class="button" type="submit" value="Add">
+                    <button class="button-primary" ng-click="deleteGoal(goal.id)">DELETE</button>
+            </form>
+        </div> -->
+    </div>
+            <div align="right">
+            <button class="button-primary" ng-click="deleteGoal(goal.id)">DELETE</button>
+            </div>
+            <hr><br>
+    </div>
         
         <h4>Add Travel Goal</h4>
         <form ng-submit="addTravelGoal()">
